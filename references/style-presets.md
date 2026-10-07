@@ -2,6 +2,8 @@
 
 Use one preset per pack. Preserve the same identity, proportions, clothing, palette, line treatment, lighting, and outline across all nine cells.
 
+When asking the user to choose a style, show all ten numbered presets. Do not truncate the menu, select four examples, hide options behind “more,” or begin generation before the user chooses. If the user supplies a style in the initial request, do not ask again.
+
 1. **3D animated sticker** — rounded stylized proportions, soft studio lighting, smooth materials, expressive face, polished family-friendly animation look; do not reference a named studio or franchise.
 2. **Japanese manga** — clean ink lines, cel shading, expressive eyes, restrained highlights, modern generic manga treatment; do not imitate a named artist or title.
 3. **Hand-drawn watercolor** — visible paper texture, soft watercolor washes, delicate pencil outline, warm handmade feeling.

@@ -21,7 +21,9 @@ Inspect at full size:
 
 Revise the smallest possible area when a single cell fails. Regenerate the full grid only when the identity or style is inconsistent across several cells.
 
-## Individual-file review
+## Individual-file review — only after an explicit split request
+
+Do not run the splitting script as part of ordinary generation or master-grid approval. Enter this review stage only when the user explicitly asks for separate, cropped, split, or individually exported files.
 
 After splitting:
 
