@@ -14,12 +14,19 @@ Inspect at full size:
 - **Consistency:** hairstyle, glasses, clothing, palette, lighting, proportions, and outline match.
 - **Expression:** every requested emotion is distinct and in the correct grid position.
 - **Anatomy:** no extra fingers, merged hands, duplicated limbs, or broken facial features.
-- **Separation:** no sticker crosses a cell boundary or touches another sticker.
+- **Separation:** no sticker crosses a cell boundary or touches another sticker; each sticker, including outline, hair, hands, and raised arms, occupies at most 70 percent of its cell.
+- **Single figure:** every cell contains exactly one character with exactly one head and one body — no duplicate heads, overlapping figures, or ghost afterimages left by a previous edit.
 - **Margins:** every figure and its white outline fit comfortably inside its cell.
 - **Transparency:** corners and spaces between stickers have alpha transparency. A checkerboard drawn into the pixels does not count.
 - **Cleanliness:** no watermark, logo, stray mark, unexpected person, unwanted text, or gibberish.
 
-Revise the smallest possible area when a single cell fails. Regenerate the full grid only when the identity or style is inconsistent across several cells.
+Revise the smallest possible area when a single cell fails. Regenerate the full grid only when the identity or style is inconsistent across several cells. Never fix overlap or ghost residue with a second inpainting pass — crop the cell, regenerate it alone, and replace it.
+
+## Cross-style review — only when the user ordered multiple styles
+
+- each pack was generated from the original portrait alone, without the previous pack attached as reference;
+- every pack differs visibly from the others in at least three rendering attributes (line work, shading, texture, palette, outline);
+- reject results that look like the same render with a color filter or minor glow added, and regenerate that pack with the additional-style template.
 
 ## Individual-file review — only after an explicit split request
 

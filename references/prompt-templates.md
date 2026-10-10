@@ -9,7 +9,7 @@ Use the attached portrait as the identity reference. Preserve the person's [face
 
 The nine emotions, from left to right and top to bottom, are: [emotion 1], [emotion 2], [emotion 3], [emotion 4], [emotion 5], [emotion 6], [emotion 7], [emotion 8], and [emotion 9]. Make each pose visibly different while keeping the same person, hairstyle, clothing, proportions, palette, lighting, and rendering style in every cell.
 
-Each sticker must be complete, centered, isolated from neighboring cells, surrounded by the same thick white sticker outline, and placed on a genuinely transparent background. Leave generous transparent spacing around every sticker. Do not add text, gibberish, watermarks, logos, extra people, repeated poses, cropped heads, cropped hands, or overlapping cells.
+Each sticker must be complete, centered, isolated from neighboring cells, surrounded by the same thick white sticker outline, and placed on a genuinely transparent background. Every sticker — including its outline, hair, hands, and any raised arms or props — must fit entirely inside its own cell and occupy at most 70 percent of the cell width and height, leaving wide transparent gutters between all cells. Keep gestures compact and close to the body; no limb, hair strand, outline, or effect may cross a cell boundary or touch another sticker. Each cell contains exactly one character with exactly one head and one body. Do not add text, gibberish, watermarks, logos, extra people, duplicate heads, ghost afterimages, repeated poses, cropped heads, cropped hands, or overlapping cells.
 ```
 
 ## Targeted cell revision
@@ -22,6 +22,12 @@ Preserve the other eight cells exactly as they are. Change only the [position] c
 
 ```text
 Create a text version from the approved no-text sticker pack. Preserve every character and pose. Add only these short phrases in the corresponding cells: [phrases]. Use one consistent, legible rounded type style, keep the words outside the face and hands, and retain the transparent background and white sticker outline. Do not change the character design. Render every Chinese character exactly as written.
+```
+
+## Additional style pack for the same character
+
+```text
+Use the attached original portrait as the only identity reference. Do not imitate the rendering of any previously generated sticker pack. Create a 3x3 grid of the same nine emotions in a consistent [new style preset] art direction that is visibly different from earlier packs in at least three ways, such as line work, shading method, material/texture, color palette, and outline treatment. Proportions, rendering, palette, and lighting all follow the new preset; only the person's face shape, hairstyle, glasses, and clothing carry over.
 ```
 
 ## Full-body source for a future desktop pet

@@ -2,6 +2,8 @@
 
 Use one preset per pack. Preserve the same identity, proportions, clothing, palette, line treatment, lighting, and outline across all nine cells.
 
+Different presets must produce visibly different packs, not the same render with a filter on top. When the user orders more than one style, each additional pack must differ from earlier packs in at least three of these attributes: line work (inked lines versus none), shading method (cel, soft 3D, flat), material/texture, color palette, and outline treatment. Never reuse a previous pack as a visual reference; only the original portrait anchors identity.
+
 When asking the user to choose a style, show all ten numbered presets. Do not truncate the menu, select four examples, hide options behind “more,” or begin generation before the user chooses. If the user supplies a style in the initial request, do not ask again.
 
 1. **3D animated sticker** — rounded stylized proportions, soft studio lighting, smooth materials, expressive face, polished family-friendly animation look; do not reference a named studio or franchise.
