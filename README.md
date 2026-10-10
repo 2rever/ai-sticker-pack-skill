@@ -1,4 +1,4 @@
-AI Sticker Pack Skill｜AI 表情包生成技能
+PersonaStickerSkill｜AI 表情包生成技能
 只需要上传一张人物照片，就能生成一套统一形象、透明背景的九宫格表情包。
 这个 Skill 封装了从人物特征提取、画风选择、九宫格生成、局部修改，到单张 PNG 切分的完整流程。适合制作聊天表情、个人 IP、社交头像、贴纸和周边素材。
 功能特点
@@ -39,7 +39,7 @@ AI Sticker Pack Skill｜AI 表情包生成技能
 如何使用
 方法一：通过 GitHub 导入
 复制本仓库地址：
-https://github.com/shauntoldtold-hue/ai-sticker-pack-skill
+https://github.com/2rever/ai-sticker-pack-skill
 打开支持 GitHub Skill 的 AI 客户端，进入工作模式，然后让 AI 安装或加载这个仓库中的 Skill。
 不同客户端的导入入口可能有所不同，请以客户端当前版本的界面为准。
 方法二：下载到本地
@@ -47,9 +47,9 @@ https://github.com/shauntoldtold-hue/ai-sticker-pack-skill
 不要只下载 SKILL.md，因为完整功能还会使用 references、scripts 和 agents 文件夹中的内容。
 推荐指令
 加载 Skill 后，上传一张人物照片，然后发送：
-使用 $ai-sticker-pack 把这张人物照片制作成透明背景的九宫格表情包。
+使用 $PersonaStickerSkill 把这张人物照片制作成透明背景的九宫格表情包。
 也可以加入自己的要求：
-使用 $ai-sticker-pack 把这张照片制作成3×3九宫格表情包。
+使用 $PersonaStickerSkill 把这张照片制作成3×3九宫格表情包。
 
 选择日系漫画风，保留人物的脸型、短发、黑框眼镜和黑色上衣。九种情绪分别是开心、无语、收到、感谢、加油、震惊、生气、偷笑和晚安。
 
@@ -133,7 +133,7 @@ pip install Pillow
 - 不同状态之间的过渡动画
 - 用于运行桌面宠物的应用程序
 文件结构
-ai-sticker-pack-skill/
+PersonaStickerSkill/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
@@ -157,4 +157,4 @@ ai-sticker-pack-skill/
 - 商业印刷前，请确认你拥有相关肖像和视觉元素的使用权
 - AI 生成的第一版结果应当被视为草稿，需要经过人工检查
 项目地址
-https://github.com/shauntoldtold-hue/ai-sticker-pack-skill
+https://github.com/2rever/ai-sticker-pack-skill

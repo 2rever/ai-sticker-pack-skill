@@ -1,9 +1,9 @@
 ---
-name: ai-sticker-pack
+name: PersonaStickerSkill
 description: Turn a user-provided portrait into a consistent transparent-background 3x3 sticker sheet, with full style selection, targeted cell revisions, optional text variants, and optional splitting into individual PNGs only when explicitly requested. Use for personal avatar stickers and reusable character assets; do not claim that the resulting images are already a complete animated desktop pet.
 ---
 
-# AI Sticker Pack
+# PersonaStickerSkill
 
 Create a coherent set of reusable stickers from one authorized portrait. Preserve identity first; add style, text, and derivative formats only after the base character is stable.
 
