@@ -3,6 +3,7 @@
 ## Before generation
 
 - The portrait is sharp enough to identify the face shape, hairstyle, glasses, and clothing.
+- The key color was chosen with `scripts/pick_chroma_color.py`, its clearance is at least 90, and the character does not wear or hold anything near the key color.
 - The user selected or accepted a style, framing, emotion list, and text preference.
 - The source likeness is authorized for the requested use.
 
@@ -17,7 +18,8 @@ Inspect at full size:
 - **Separation:** no sticker crosses a cell boundary or touches another sticker; each sticker, including outline, hair, hands, and raised arms, occupies at most 70 percent of its cell.
 - **Single figure:** every cell contains exactly one character with exactly one head and one body — no duplicate heads, overlapping figures, or ghost afterimages left by a previous edit.
 - **Margins:** every figure and its white outline fit comfortably inside its cell.
-- **Transparency:** corners and spaces between stickers have alpha transparency. A checkerboard drawn into the pixels does not count.
+- **Transparency:** after keying with `rebuild_outline.py`, corners and spaces between stickers have real alpha transparency and no key-color halo remains along the edges (raise `--chroma-tol` if it does). A checkerboard drawn into the pixels does not count.
+- **Outline integrity:** the white outline is closed and uniform around every figure, including between fingers and around hair tips. Repair breaks with `scripts/rebuild_outline.py` instead of re-generating or re-keying; verify the repaired alpha channel afterwards.
 - **Cleanliness:** no watermark, logo, stray mark, unexpected person, unwanted text, or gibberish.
 
 Revise the smallest possible area when a single cell fails. Regenerate the full grid only when the identity or style is inconsistent across several cells. Never fix overlap or ghost residue with a second inpainting pass — crop the cell, regenerate it alone, and replace it.

@@ -65,7 +65,8 @@ def main() -> int:
     alpha_min, alpha_max = alpha.getextrema()
     if args.require_alpha and alpha_min == 255:
         raise SystemExit(
-            "source image is fully opaque; regenerate or remove the background before splitting"
+            "source image is fully opaque; key the background with "
+            "rebuild_outline.py --chroma auto or remove it before splitting"
         )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)

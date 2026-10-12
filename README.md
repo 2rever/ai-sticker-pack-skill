@@ -8,6 +8,7 @@ PersonaStickerSkill｜AI 表情包生成技能
 - 支持十种预设画风
 - 支持透明背景和统一白色贴纸描边
 - 一次生成，只产出透明背景版本，不会先生成白底或预览版再生成第二次
+- 生成时按人物发色和衣服自动选出对比最强的纯色底，一次生成后脚本抠成透明背景并重建白边
 - 只展示一次：质检和修复在展示前完成，失败草稿不会发给你
 - 支持只修改九宫格中的某一格
 - 支持无文字版和文字版表情包
@@ -103,6 +104,19 @@ python3 scripts/split_sticker_grid.py master.png output-dir \
 脚本依赖 Pillow：
 pip install Pillow
 运行完成后，输出目录中会包含九张独立 PNG 图片和一份切分记录文件。
+白边修复与抠图
+生成前先用脚本分析人像照片的主色（发色、衣服、肤色），选出对比最强的底色，并把这个颜色写进生成提示词：
+python3 scripts/pick_chroma_color.py portrait.png
+# 输出 key_color，例如 00FFFF（青色）或 FF00FF（品红）
+生成后一键抠底 + 重建白边：
+python3 scripts/rebuild_outline.py master-raw.png master.png --chroma 00FFFF
+如果图片带未知纯色背景，可以用 --chroma auto 自动采样四角颜色。
+脚本会抠掉底色、剥除断裂的旧白边，从人物剪影向外重建一圈闭合、均匀、纯白的新描边，并输出修复报告。
+底色选择原则（脚本已自动执行，按主色距离排序）：
+- 深色头发/黑衣服 → 青色、品红等高对比色
+- 绿色衣服 → 蓝色或品红，黑色仅在人物没有深色头发和衣服时才可用
+- 白色永远禁用：白色描边会被一起抠掉
+- 如果抠图后边缘残留底色光晕，可以加大容差：--chroma-tol 64
 质量检查
 完成后建议检查以下项目：
 - 是否正好包含九种需要的情绪
@@ -144,13 +158,17 @@ PersonaStickerSkill/
 │   ├── quality-checks.md
 │   └── style-presets.md
 └── scripts/
-    └── split_sticker_grid.py
+    ├── split_sticker_grid.py
+    ├── rebuild_outline.py
+    └── pick_chroma_color.py
 - SKILL.md：Skill 的主要工作流程和执行规则
 - agents/openai.yaml：Skill 的名称、简介和默认调用指令
 - style-presets.md：十种预设画风
 - prompt-templates.md：生成、局部修改和文字版提示词
 - quality-checks.md：表情包质量检查标准
 - split_sticker_grid.py：九宫格自动切分脚本
+- rebuild_outline.py：白边重建与纯色背景抠图脚本
+- pick_chroma_color.py：按人物主色自动选择抠图底色脚本
 使用边界
 - 不要上传无权使用的人物照片
 - 不要冒充他人或侵犯他人肖像权
