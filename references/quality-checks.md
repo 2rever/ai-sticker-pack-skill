@@ -14,8 +14,9 @@ Inspect at full size:
 - **Identity:** all nine cells depict the same person.
 - **Consistency:** hairstyle, glasses, clothing, palette, lighting, proportions, and outline match.
 - **Expression:** every requested emotion is distinct and in the correct grid position.
-- **Anatomy:** no extra fingers, merged hands, duplicated limbs, or broken facial features.
-- **Separation:** no sticker crosses a cell boundary or touches another sticker; each sticker, including outline, hair, hands, and raised arms, occupies at most 70 percent of its cell.
+- **Anatomy:** no extra fingers, merged hands, duplicated limbs, or broken facial features. Both eyes are fully drawn and visible in every cell — lenses are transparent when the character wears glasses, and closed-eye expressions still show eyelid lines and lashes; blank, frosted, or skin-colored lenses count as broken faces.
+- **Separation:** no sticker crosses a cell boundary or touches another sticker; each sticker, including outline, hair, hands, and raised arms, occupies at most 70 percent of its cell. No grid lines, divider lines, cell borders, panels, or cards are drawn behind or between stickers, and no glow or rim light in the key color surrounds the stickers.
+- **Coverage:** transparent pixels should make up roughly half the image or more for a 3x3 pack at 70 percent cell fill. Substantially less means background panels leaked through — treat it as a failed generation and regenerate, never as a repair job.
 - **Single figure:** every cell contains exactly one character with exactly one head and one body — no duplicate heads, overlapping figures, or ghost afterimages left by a previous edit.
 - **Margins:** every figure and its white outline fit comfortably inside its cell.
 - **Transparency:** corners and spaces between stickers have real alpha transparency. When keying was necessary, no key-color halo, fiber fringe, or detached residue remains along the edges (raise `--chroma-tol`, or use `--erode 2-4` for fuzzy styles and `--keep-largest` on single stickers — never on a grid). A checkerboard drawn into the pixels does not count.

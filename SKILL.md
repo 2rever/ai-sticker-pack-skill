@@ -88,6 +88,6 @@ For the default unsplit master grid, deliver only after confirming:
 - the same person, hairstyle, glasses, clothing, and art direction persist across all cells;
 - every figure is complete, centered, isolated, and surrounded by an intact white outline;
 - the background contains real alpha transparency;
-- no text, watermark, duplicated limb, stray character, or neighboring-cell residue remains unless explicitly requested;
+- no text, watermark, duplicated limb, stray character, neighboring-cell residue, grid divider lines, background panels, or key-color glow remains unless explicitly requested;
 
 If the user explicitly requested splitting, additionally confirm that the nine exported PNGs open independently and match the approved grid.
