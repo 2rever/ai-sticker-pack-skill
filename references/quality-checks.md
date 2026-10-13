@@ -18,7 +18,7 @@ Inspect at full size:
 - **Separation:** no sticker crosses a cell boundary or touches another sticker; each sticker, including outline, hair, hands, and raised arms, occupies at most 70 percent of its cell.
 - **Single figure:** every cell contains exactly one character with exactly one head and one body — no duplicate heads, overlapping figures, or ghost afterimages left by a previous edit.
 - **Margins:** every figure and its white outline fit comfortably inside its cell.
-- **Transparency:** after keying with `rebuild_outline.py`, corners and spaces between stickers have real alpha transparency and no key-color halo remains along the edges (raise `--chroma-tol` if it does). A checkerboard drawn into the pixels does not count.
+- **Transparency:** corners and spaces between stickers have real alpha transparency. When keying was necessary, no key-color halo, fiber fringe, or detached residue remains along the edges (raise `--chroma-tol`, or use `--erode 2-4` for fuzzy styles and `--keep-largest` on single stickers — never on a grid). A checkerboard drawn into the pixels does not count.
 - **Outline integrity:** the white outline is closed and uniform around every figure, including between fingers and around hair tips. Repair breaks with `scripts/rebuild_outline.py` instead of re-generating or re-keying; verify the repaired alpha channel afterwards.
 - **Cleanliness:** no watermark, logo, stray mark, unexpected person, unwanted text, or gibberish.
 

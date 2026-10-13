@@ -2,6 +2,8 @@
 
 Use one preset per pack. Preserve the same identity, proportions, clothing, palette, line treatment, lighting, and outline across all nine cells.
 
+Texture-heavy presets (watercolor, clay, crayon, felt) still need one clean closed silhouette per sticker: no stray fibers, bristles, drips, or crumbs extending into the background, and no banners, frames, or border strips anywhere in the image. Prefer direct transparent-background generation for these presets; color keying is the fallback of last resort.
+
 Different presets must produce visibly different packs, not the same render with a filter on top. When the user orders more than one style, each additional pack must differ from earlier packs in at least three of these attributes: line work (inked lines versus none), shading method (cel, soft 3D, flat), material/texture, color palette, and outline treatment. Never reuse a previous pack as a visual reference; only the original portrait anchors identity.
 
 When asking the user to choose a style, show all ten numbered presets. Do not truncate the menu, select four examples, hide options behind “more,” or begin generation before the user chooses. If the user supplies a style in the initial request, do not ask again.

@@ -97,6 +97,49 @@ def dilate(mask: Image.Image, px: int) -> Image.Image:
     return mask.filter(ImageFilter.MaxFilter(2 * px + 1))
 
 
+def keep_largest_component(mask: Image.Image) -> tuple[Image.Image, int]:
+    """Keep only the largest opaque component; for single stickers, never grids."""
+    from collections import deque
+
+    w, h = mask.size
+    data = mask.tobytes()
+    labels = bytearray(w * h)
+    best_label, best_size, label = 0, 0, 0
+    for start in range(w * h):
+        if data[start] != 255 or labels[start]:
+            continue
+        label += 1
+        size = 0
+        queue = deque([start])
+        labels[start] = label
+        while queue:
+            i = queue.popleft()
+            size += 1
+            x = i % w
+            for j in (
+                i - 1 if x > 0 else -1,
+                i + 1 if x < w - 1 else -1,
+                i - w,
+                i + w,
+            ):
+                if 0 <= j < w * h and data[j] == 255 and not labels[j]:
+                    labels[j] = label
+                    queue.append(j)
+        if size > best_size:
+            best_size, best_label = size, label
+    kept = Image.frombytes(
+        "L", (w, h), bytes(255 if v == best_label else 0 for v in labels)
+    )
+    return kept, label - 1
+
+
+def clip_to_mask(image: Image.Image, mask: Image.Image) -> Image.Image:
+    alpha = ImageChops.darker(image.getchannel("A"), mask)
+    out = image.copy()
+    out.putalpha(alpha)
+    return out
+
+
 def strip_broken_outline(image: Image.Image, band_px: int, white_thresh: int) -> Image.Image:
     """Remove near-white pixels in the outer band (the model's broken outline)."""
     mask = fill_holes(silhouette(image))
@@ -153,6 +196,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--white-threshold", type=int, default=232, help="Channel value above which band pixels count as broken outline (default 232)")
     parser.add_argument("--no-strip", action="store_true", help="Keep the existing outline instead of stripping and rebuilding it")
+    parser.add_argument("--erode", type=int, default=0, help="Shrink the silhouette by N pixels before rebuilding, cutting away fuzzy fiber fringe (use 2-4 for felt, clay, watercolor, crayon styles)")
+    parser.add_argument("--keep-largest", action="store_true", help="Keep only the largest connected figure; removes detached residue. For single stickers only, never grids")
     parser.add_argument("--feather", type=float, default=0.0, help="Gaussian blur radius applied to the final alpha")
     return parser.parse_args()
 
@@ -171,6 +216,15 @@ def main() -> int:
         image = chroma_key(image, color, args.chroma_tol)
         keyed = True
 
+    removed_components = 0
+    if args.keep_largest or args.erode > 0:
+        mask = fill_holes(silhouette(image))
+        if args.erode > 0:
+            mask = erode(mask, args.erode)
+        if args.keep_largest:
+            mask, removed_components = keep_largest_component(mask)
+        image = clip_to_mask(image, mask)
+
     width = args.outline_width or max(2, round(min(image.size) * 0.012))
     if not args.no_strip:
         image = strip_broken_outline(image, band_px=width + max(2, width // 2), white_thresh=args.white_threshold)
@@ -188,6 +242,8 @@ def main() -> int:
         "output": str(args.output),
         "chroma_keyed": keyed,
         "outline_width_px": width,
+        "eroded_px": args.erode,
+        "removed_components": removed_components,
         "stripped_broken_outline": not args.no_strip,
         "before": before,
         "after": stats(image),
