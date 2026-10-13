@@ -6,8 +6,11 @@ Two jobs, both deterministic (no image model involved):
 1. Optional chroma-key removal of a solid background. Use magenta
    (#FF00FF) when asking a model to render on a solid color: it is far
    from skin, hair, clothing, and the white sticker outline, so keying
-   stays clean. Never key on black or white backgrounds -- dark hair and
-   the white outline would be removed together with the background.
+   stays clean. Never generate on black or white backgrounds -- dark
+   hair and the white outline sit too close to them. As a repair for an
+   inconsistent background, several colors can be keyed in order
+   ("--chroma 00FFFF,FFFFFF"); a white pass is acceptable here only
+   because the outline is rebuilt from the silhouette afterwards.
    "--chroma auto" samples the four image corners instead.
 
 2. Rebuild the white sticker outline from the alpha silhouette. The
@@ -95,6 +98,35 @@ def erode(mask: Image.Image, px: int) -> Image.Image:
 
 def dilate(mask: Image.Image, px: int) -> Image.Image:
     return mask.filter(ImageFilter.MaxFilter(2 * px + 1))
+
+
+def despill(image: Image.Image, color: tuple[int, int, int], band_px: int = 2) -> Image.Image:
+    """Neutralize key-color spill in a thin band around the silhouette.
+
+    For each dominant channel of the key color (value >= 128), clamp that
+    channel to the maximum of the non-dominant channels, so residual fringe
+    pixels turn neutral instead of glowing in the key color. Interior
+    details (glasses frames, thin lines) are preserved -- only the band is
+    touched. Keys that are all-dominant (white) or non-dominant (black)
+    have no spill direction and are skipped.
+    """
+    dominant = [i for i, v in enumerate(color) if v >= 128]
+    others = [i for i in range(3) if i not in dominant]
+    if not dominant or not others:
+        return image
+    rgb = image.convert("RGB")
+    channels = list(rgb.split())
+    ceiling = channels[others[0]]
+    for i in others[1:]:
+        ceiling = ImageChops.lighter(ceiling, channels[i])
+    mask = fill_holes(silhouette(image))
+    band = ImageChops.subtract(dilate(mask, band_px), erode(mask, band_px))
+    for i in dominant:
+        clamped = ImageChops.darker(channels[i], ceiling)
+        channels[i] = Image.composite(clamped, channels[i], band)
+    out = Image.merge("RGB", channels).convert("RGBA")
+    out.putalpha(image.getchannel("A"))
+    return out
 
 
 def keep_largest_component(mask: Image.Image) -> tuple[Image.Image, int]:
@@ -185,7 +217,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--chroma",
         default=None,
-        help="Solid background to key out first: RRGGBB hex (e.g. FF00FF) or 'auto' to sample the corners",
+        help="Solid background to key out first: RRGGBB hex (e.g. FF00FF), 'auto' to sample the corners, or a comma-separated list (e.g. '00FFFF,FFFFFF') keyed in order. A white pass is safe here only because the outline is rebuilt afterwards",
     )
     parser.add_argument("--chroma-tol", type=int, default=48, help="Chroma key tolerance (default 48)")
     parser.add_argument(
@@ -197,6 +229,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--white-threshold", type=int, default=232, help="Channel value above which band pixels count as broken outline (default 232)")
     parser.add_argument("--no-strip", action="store_true", help="Keep the existing outline instead of stripping and rebuilding it")
     parser.add_argument("--erode", type=int, default=0, help="Shrink the silhouette by N pixels before rebuilding, cutting away fuzzy fiber fringe (use 2-4 for felt, clay, watercolor, crayon styles)")
+    parser.add_argument("--despill", action="store_true", help="Neutralize key-color fringe in a thin edge band (blue/cyan residue lines) without eroding thin details like glasses frames")
     parser.add_argument("--keep-largest", action="store_true", help="Keep only the largest connected figure; removes detached residue. For single stickers only, never grids")
     parser.add_argument("--feather", type=float, default=0.0, help="Gaussian blur radius applied to the final alpha")
     return parser.parse_args()
@@ -211,10 +244,22 @@ def main() -> int:
     before = stats(image)
 
     keyed = False
+    key_colors = []
     if args.chroma is not None:
-        color = corner_color(image) if args.chroma == "auto" else parse_color(args.chroma, image.size)
-        image = chroma_key(image, color, args.chroma_tol)
+        key_colors = (
+            [corner_color(image)]
+            if args.chroma == "auto"
+            else [parse_color(part, image.size) for part in args.chroma.split(",")]
+        )
+        for color in key_colors:
+            image = chroma_key(image, color, args.chroma_tol)
         keyed = True
+
+    despilled = False
+    if args.despill and key_colors:
+        for color in key_colors:
+            image = despill(image, color)
+        despilled = True
 
     removed_components = 0
     if args.keep_largest or args.erode > 0:
@@ -241,6 +286,7 @@ def main() -> int:
         "input": str(args.input),
         "output": str(args.output),
         "chroma_keyed": keyed,
+        "despilled": despilled,
         "outline_width_px": width,
         "eroded_px": args.erode,
         "removed_components": removed_components,

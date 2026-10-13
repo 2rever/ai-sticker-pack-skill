@@ -14,7 +14,7 @@ Require an attached portrait before image generation. If the image depicts someo
 Use these defaults when the user does not specify them:
 
 - Layout: 3x3 grid, nine independent stickers.
-- Emotions: happy, speechless, acknowledged, grateful, cheering, shocked, angry, giggling, good night.
+- Emotions, each with a concrete pose (abstract emotion names alone let the model improvise — including dropping the eyes): happy (open-mouth smile, eyes open), speechless (visible eye-roll or half-lidded side glance — eyes always drawn, never removed), acknowledged (OK hand sign, eyes on the hand or viewer), grateful (palms together, smiling eyes), cheering (both fists raised, wide eyes), shocked (wide eyes, open mouth), angry (furrowed brows, glaring eyes), giggling (hand covering mouth, squinting smile), good night (yawning, closed eyes with visible lid lines and lashes).
 - Style: ask the user to choose from the complete ten-preset list below. Use cute 3D animated sticker only when the user explicitly accepts the default.
 - Character framing: head-and-shoulders unless the user requests full body.
 - Background: when the image tool can output genuine alpha transparency, generate the grid on a transparent background directly — this is the preferred route and is required for fuzzy-edge styles (felt, clay, watercolor, crayon), whose fibers cannot be color-keyed cleanly. When the tool cannot produce real alpha, generate on one solid key color chosen per portrait with `scripts/pick_chroma_color.py` (white is never used because the outline is white) and key it with `scripts/rebuild_outline.py --chroma <hex>`. The delivered master is always truly transparent, never a white or painted checkerboard background.
@@ -87,6 +87,7 @@ For the default unsplit master grid, deliver only after confirming:
 - exactly nine intended emotions are present;
 - the same person, hairstyle, glasses, clothing, and art direction persist across all cells;
 - every figure is complete, centered, isolated, and surrounded by an intact white outline;
+- every face has both eyes visibly drawn — transparent lenses when the character wears glasses, lid lines and lashes for closed eyes; solid black, blank, frosted, or skin-colored lenses are defects that block delivery;
 - the background contains real alpha transparency;
 - no text, watermark, duplicated limb, stray character, neighboring-cell residue, grid divider lines, background panels, or key-color glow remains unless explicitly requested;
 
